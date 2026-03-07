@@ -4,13 +4,10 @@ layout: home
 nav_order: 1
 ---
 
-# Cyber Threat Intelligence Reports
+# Cyber Intelligence Portal
 
-Technical CTI investigations and threat intelligence tracking.
+This portal contains three intelligence levels:
 
-This repository contains technical threat intelligence investigations including:
-
-- phishing campaigns
-- malware analysis
-- threat actor activity
-- infrastructure tracking
+- Strategic Cyber Geopolitics
+- SOC Tactical TTP Reports
+- Cyber Threat Intelligence Reports
