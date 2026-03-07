@@ -1,14 +1,14 @@
 ---
-layout: default
-title: SOC Reports
+layout: home
+title: CTI Intelligence Reports
+nav_order: 1
 ---
 
-# SOC Incident Reports
+# Cyber Threat Intelligence Reports
 
-Welcome to my SOC investigation reports.
+This repository contains technical threat intelligence investigations including:
 
-## Latest Reports
-
-{% for post in site.posts %}
-- [{{ post.title }}]({{ post.url }}) - {{ post.date | date: "%Y-%m-%d" }}
-{% endfor %}
+- phishing campaigns
+- malware analysis
+- threat actor activity
+- infrastructure tracking
