@@ -1,7 +1,7 @@
 --- 
 layout: default
 title: "rapor1"
-parent: SOC / TTP Detection (Tactical Level Analysis)
+parent: SOC Analysis / TTP Detection -Tactical Level
 nav_order: 1
 ---
 
