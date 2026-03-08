@@ -1,6 +1,6 @@
 ---
 layout: default
-title: CTI Raporları
+title: CTI ( Operational Level Analysis )
 nav_order: 3
 has_children: true
 ---
