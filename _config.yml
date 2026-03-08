@@ -1,6 +1,10 @@
 title: Cyber Analysis
 description: About Me
 
+
+url: "https://cenkcti.github.io/Cyber_Analysis_byCenk/"
+baseurl: "/Cyber_Analysis_byCenk"
+
 remote_theme: just-the-docs/just-the-docs
 
 color_scheme: dark
