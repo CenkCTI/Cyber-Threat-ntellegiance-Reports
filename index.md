@@ -1,13 +1,13 @@
 ---
-title: CTI Intelligence Reports
+title: Cyber Analysis Report Blog
 layout: home
 nav_order: 1
 ---
 
-# Cyber Intelligence Portal
+# About ME
 
-This portal contains three intelligence levels:
+asdasdasda:
 
-- Strategic Cyber Geopolitics
-- SOC Tactical TTP Reports
-- Cyber Threat Intelligence Reports
+- Stasdr Geopolitics
+- SOC Tacasdports
+- Cyber sadigence Reports
