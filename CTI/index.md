@@ -1,6 +1,6 @@
 ---
 layout: default
-title: CTI ( Operational Level Analysis )
+title: CTI Analysis -Operational Level
 nav_order: 3
 has_children: true
 ---
