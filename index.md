@@ -16,7 +16,7 @@ This website serves as a personal platform where I share cyber incident analysis
 
 I am currently seeking opportunities in SOC Analyst roles or Cyber Threat Intelligence, where I can apply analytical skills and continue developing expertise in cyber defense.
 
-Education / Training
+## Education / Training
 
 TryHackMe – SOC Level 1 Training
 
