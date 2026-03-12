@@ -1,10 +1,11 @@
 --- 
 layout: default
-title: "rapor1"
+title: "Renewable Energy Facility – December 2025 Incident Poland"
 parent: SOC Analysis / TTP Detection -Tactical Level
 nav_order: 1
 ---
-**SOC TTP Analysis: Renewable Energy Facility – December 2025 Incident**
+
+## SOC TTP Analysis: Renewable Energy Facility – December 2025 Incident Poland
 
 ## 1. Executive Summary
  
