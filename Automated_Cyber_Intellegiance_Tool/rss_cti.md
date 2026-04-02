@@ -17,9 +17,17 @@ parent: Automated CTI Tool
 
 ---
 
-## Python Code
-
 ```python
+///
+"""
+RSS Feed Reader & SQLite Storage Pipeline
+==========================================
+Features:
+  - Fetches multiple RSS feeds via feedparser
+  - Extracts title, link, published date, and summary
+  - Stores entries in SQLite, using link as a unique key (no duplicates)
+  - Structured for future spaCy NLP / entity extraction
+"""
 
 import sqlite3
 import logging
@@ -28,13 +36,14 @@ from time import mktime, struct_time
 
 import feedparser  # pip install feedparser
 
- ── Optional: uncomment when you're ready to add spaCy NER ────────────────────
-import spacy
- nlp = spacy.load("en_core_web_sm")  # python -m spacy download en_core_web_sm
-─────────────────────────────────────────────────────────────────────────────
---------------------------------------------------------------------------
-Configuration
- ---------------------------------------------------------------------------
+# ── Optional: uncomment when you're ready to add spaCy NER ────────────────────
+# import spacy
+# nlp = spacy.load("en_core_web_sm")  # python -m spacy download en_core_web_sm
+# ─────────────────────────────────────────────────────────────────────────────
+
+# ---------------------------------------------------------------------------
+# Configuration
+# ---------------------------------------------------------------------------
 
 DB_PATH = "rss_feeds.db"
 
@@ -53,9 +62,9 @@ logging.basicConfig(
 log = logging.getLogger(__name__)
 
 
----------------------------------------------------------------------------
-Database helpers
- ---------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
+# Database helpers
+# ---------------------------------------------------------------------------
 
 def get_connection(db_path: str = DB_PATH) -> sqlite3.Connection:
     """Open (or create) the SQLite database and return a connection."""
@@ -99,9 +108,9 @@ def create_tables(conn: sqlite3.Connection) -> None:
     log.info("Database schema ready.")
 
 
- ---------------------------------------------------------------------------
- Parsing helpers
- ---------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
+# Parsing helpers
+# ---------------------------------------------------------------------------
 
 def parse_date(entry: feedparser.FeedParserDict) -> str | None:
     """
@@ -129,9 +138,9 @@ def clean_html(text: str | None) -> str:
     return re.sub(r"<[^>]+>", "", text).strip()
 
 
- ---------------------------------------------------------------------------
- Entity extraction stub  (activate once spaCy is installed)
- ---------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
+# Entity extraction stub  (activate once spaCy is installed)
+# ---------------------------------------------------------------------------
 
 def extract_entities(text: str) -> str:
     """
@@ -142,23 +151,23 @@ def extract_entities(text: str) -> str:
       2. python -m spacy download en_core_web_sm
       3. Uncomment the import block at the top of this file.
       4. Replace the body below with the real implementation.
--------------------------------------------------------------------------------------
+
     Returns a JSON string like:
       [{"text": "OpenAI", "label": "ORG"}, {"text": "San Francisco", "label": "GPE"}]
     """
-     ── Real implementation (uncomment when spaCy is available) ──────────────
-     import json
-     doc = nlp(text[:100_000])   # guard against huge texts
-     entities = [{"text": ent.text, "label": ent.label_} for ent in doc.ents]
-     return json.dumps(entities, ensure_ascii=False)
-     ─────────────────────────────────────────────────────────────────────────
+    # ── Real implementation (uncomment when spaCy is available) ──────────────
+    # import json
+    # doc = nlp(text[:100_000])   # guard against huge texts
+    # entities = [{"text": ent.text, "label": ent.label_} for ent in doc.ents]
+    # return json.dumps(entities, ensure_ascii=False)
+    # ─────────────────────────────────────────────────────────────────────────
 
     return ""   # empty string = "not yet extracted"
 
 
- ---------------------------------------------------------------------------
- Core pipeline
- ---------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
+# Core pipeline
+# ---------------------------------------------------------------------------
 
 def fetch_feed(feed_url: str) -> list[feedparser.FeedParserDict]:
     """Download and parse a single RSS/Atom feed. Returns a list of entries."""
@@ -199,10 +208,10 @@ def store_entries(
         summary  = clean_html(getattr(entry, "summary", "") or "")
         pub_date = parse_date(entry)
 
-         ── Future hook: extract entities from title + summary ────────────
-         entities_json = extract_entities(f"{title}. {summary}")
+        # ── Future hook: extract entities from title + summary ────────────
+        # entities_json = extract_entities(f"{title}. {summary}")
         entities_json = ""   # leave blank until spaCy is wired up
-         ─────────────────────────────────────────────────────────────────
+        # ─────────────────────────────────────────────────────────────────
 
         cursor = conn.execute(
             """
@@ -252,6 +261,10 @@ def run_pipeline(feed_urls: list[str], db_path: str = DB_PATH) -> None:
     )
 
 
+# ---------------------------------------------------------------------------
+# Quick query helper (optional / for debugging)
+# ---------------------------------------------------------------------------
+
 def print_latest(db_path: str = DB_PATH, limit: int = 10) -> None:
     """Print the most recently fetched entries to stdout."""
     conn = get_connection(db_path)
@@ -276,6 +289,12 @@ def print_latest(db_path: str = DB_PATH, limit: int = 10) -> None:
         print()
 
 
+# ---------------------------------------------------------------------------
+# Entry point
+# ---------------------------------------------------------------------------
+
 if __name__ == "__main__":
     run_pipeline(RSS_FEEDS)
     print_latest(limit=5)
+///
+```
