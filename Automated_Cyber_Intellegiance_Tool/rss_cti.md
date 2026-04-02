@@ -7,6 +7,19 @@ parent: Automated CTI Tool
 
 
 
+# RSS Feed Reader & SQLite Storage Pipeline
+
+## Features
+- Fetches multiple RSS feeds via feedparser
+- Extracts title, link, published date, and summary
+- Stores entries in SQLite, using link as a unique key (no duplicates)
+- Structured for future spaCy NLP / entity extraction
+
+---
+
+## Python Code
+
+```python
 """
 RSS Feed Reader & SQLite Storage Pipeline
 ==========================================
@@ -24,10 +37,10 @@ from time import mktime, struct_time
 
 import feedparser  # pip install feedparser
 
-# ── Optional: uncomment when you're ready to add spaCy NER ────────────────────
+# ── Optional: uncomment when you're ready to add spaCy NER ─────────────
 # import spacy
 # nlp = spacy.load("en_core_web_sm")  # python -m spacy download en_core_web_sm
-# ─────────────────────────────────────────────────────────────────────────────
+# ──────────────────────────────────────────────────────────────────────
 
 # ---------------------------------------------------------------------------
 # Configuration
@@ -36,10 +49,10 @@ import feedparser  # pip install feedparser
 DB_PATH = "rss_feeds.db"
 
 RSS_FEEDS = [
-    "https://feeds.bbci.co.uk/news/world/rss.xml",          # BBC World News
-    "https://rss.nytimes.com/services/xml/rss/nyt/World.xml",# NYT World
-    "https://feeds.reuters.com/reuters/topNews",             # Reuters Top News
-    "https://hnrss.org/frontpage",                           # Hacker News
+    "https://feeds.bbci.co.uk/news/world/rss.xml",          
+    "https://rss.nytimes.com/services/xml/rss/nyt/World.xml",
+    "https://feeds.reuters.com/reuters/topNews",             
+    "https://hnrss.org/frontpage",                           
 ]
 
 logging.basicConfig(
@@ -49,7 +62,6 @@ logging.basicConfig(
 )
 log = logging.getLogger(__name__)
 
-
 # ---------------------------------------------------------------------------
 # Database helpers
 # ---------------------------------------------------------------------------
@@ -57,9 +69,8 @@ log = logging.getLogger(__name__)
 def get_connection(db_path: str = DB_PATH) -> sqlite3.Connection:
     """Open (or create) the SQLite database and return a connection."""
     conn = sqlite3.connect(db_path)
-    conn.row_factory = sqlite3.Row   # lets you access columns by name
+    conn.row_factory = sqlite3.Row
     return conn
-
 
 def create_tables(conn: sqlite3.Connection) -> None:
     """
@@ -80,21 +91,19 @@ def create_tables(conn: sqlite3.Connection) -> None:
             id            INTEGER PRIMARY KEY AUTOINCREMENT,
             feed_url      TEXT    NOT NULL,
             title         TEXT,
-            link          TEXT    NOT NULL UNIQUE,   -- <-- dedup key
+            link          TEXT    NOT NULL UNIQUE,
             published_at  TEXT,
             summary       TEXT,
-            entities_json TEXT,                      -- future spaCy output
+            entities_json TEXT,
             fetched_at    TEXT    NOT NULL
         )
     """)
-    # Index on published_at to speed up time-range queries later
     conn.execute("""
         CREATE INDEX IF NOT EXISTS idx_published_at
         ON feed_entries (published_at)
     """)
     conn.commit()
     log.info("Database schema ready.")
-
 
 # ---------------------------------------------------------------------------
 # Parsing helpers
@@ -114,7 +123,6 @@ def parse_date(entry: feedparser.FeedParserDict) -> str | None:
                 pass
     return None
 
-
 def clean_html(text: str | None) -> str:
     """
     Very lightweight HTML tag stripper for summaries.
@@ -125,33 +133,15 @@ def clean_html(text: str | None) -> str:
     import re
     return re.sub(r"<[^>]+>", "", text).strip()
 
-
 # ---------------------------------------------------------------------------
-# Entity extraction stub  (activate once spaCy is installed)
+# Entity extraction stub
 # ---------------------------------------------------------------------------
 
 def extract_entities(text: str) -> str:
     """
     Placeholder for spaCy Named Entity Recognition.
-
-    When ready:
-      1. pip install spacy
-      2. python -m spacy download en_core_web_sm
-      3. Uncomment the import block at the top of this file.
-      4. Replace the body below with the real implementation.
-
-    Returns a JSON string like:
-      [{"text": "OpenAI", "label": "ORG"}, {"text": "San Francisco", "label": "GPE"}]
     """
-    # ── Real implementation (uncomment when spaCy is available) ──────────────
-    # import json
-    # doc = nlp(text[:100_000])   # guard against huge texts
-    # entities = [{"text": ent.text, "label": ent.label_} for ent in doc.ents]
-    # return json.dumps(entities, ensure_ascii=False)
-    # ─────────────────────────────────────────────────────────────────────────
-
     return ""   # empty string = "not yet extracted"
-
 
 # ---------------------------------------------------------------------------
 # Core pipeline
@@ -163,13 +153,11 @@ def fetch_feed(feed_url: str) -> list[feedparser.FeedParserDict]:
     parsed = feedparser.parse(feed_url)
 
     if parsed.bozo:
-        # bozo=True means feedparser encountered a malformed feed
         log.warning("  Malformed feed (%s): %s", feed_url, parsed.bozo_exception)
 
     entries = parsed.entries
     log.info("  Found %d entries.", len(entries))
     return entries
-
 
 def store_entries(
     conn: sqlite3.Connection,
@@ -178,8 +166,7 @@ def store_entries(
 ) -> tuple[int, int]:
     """
     Insert new entries into the database.
-
-    Uses INSERT OR IGNORE so duplicate links are silently skipped.
+    Uses INSERT OR IGNORE to skip duplicates.
     Returns (inserted_count, skipped_count).
     """
     now = datetime.utcnow().isoformat()
@@ -192,21 +179,16 @@ def store_entries(
             skipped += 1
             continue
 
-        title    = getattr(entry, "title",   "") or ""
+        title    = getattr(entry, "title", "") or ""
         summary  = clean_html(getattr(entry, "summary", "") or "")
         pub_date = parse_date(entry)
-
-        # ── Future hook: extract entities from title + summary ────────────
-        # entities_json = extract_entities(f"{title}. {summary}")
-        entities_json = ""   # leave blank until spaCy is wired up
-        # ─────────────────────────────────────────────────────────────────
+        entities_json = ""  # placeholder
 
         cursor = conn.execute(
             """
             INSERT OR IGNORE INTO feed_entries
                 (feed_url, title, link, published_at, summary, entities_json, fetched_at)
-            VALUES
-                (?, ?, ?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
             """,
             (feed_url, title, link, pub_date, summary, entities_json, now),
         )
@@ -221,11 +203,8 @@ def store_entries(
     conn.commit()
     return inserted, skipped
 
-
 def run_pipeline(feed_urls: list[str], db_path: str = DB_PATH) -> None:
-    """
-    Main entry point: iterate over all feed URLs, fetch, and store.
-    """
+    """Main pipeline: fetch and store all feeds."""
     conn = get_connection(db_path)
     create_tables(conn)
 
@@ -235,10 +214,10 @@ def run_pipeline(feed_urls: list[str], db_path: str = DB_PATH) -> None:
         try:
             entries = fetch_feed(url)
             ins, skp = store_entries(conn, url, entries)
-            log.info("  → Inserted: %d  |  Skipped (duplicates): %d", ins, skp)
+            log.info("  → Inserted: %d  |  Skipped: %d", ins, skp)
             total_inserted += ins
             total_skipped  += skp
-        except Exception as exc:                      # noqa: BLE001
+        except Exception as exc:
             log.error("  ✗ Failed to process %s: %s", url, exc)
 
     conn.close()
@@ -248,9 +227,8 @@ def run_pipeline(feed_urls: list[str], db_path: str = DB_PATH) -> None:
         total_skipped,
     )
 
-
 # ---------------------------------------------------------------------------
-# Quick query helper (optional / for debugging)
+# Quick query helper
 # ---------------------------------------------------------------------------
 
 def print_latest(db_path: str = DB_PATH, limit: int = 10) -> None:
@@ -275,7 +253,6 @@ def print_latest(db_path: str = DB_PATH, limit: int = 10) -> None:
         print(f"   Source : {row['feed_url']}")
         print(f"   URL    : {row['link']}")
         print()
-
 
 # ---------------------------------------------------------------------------
 # Entry point
