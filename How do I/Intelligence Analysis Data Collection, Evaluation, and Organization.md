@@ -1,6 +1,6 @@
 ---
 layout: default
-title: "Intelligence Analysis: Data Collection, Evaluation, and Organization"
+title: "Intelligence Analysis Data Collection, Evaluation, and Organization"
 parent: "How do I prepare for the profession of cyber security analyst and CTI?"
 nav_order: 1
 ---
