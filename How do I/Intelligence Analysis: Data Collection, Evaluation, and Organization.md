@@ -6,6 +6,7 @@ nav_order: 1
 ---
 
 
+
 # Comparing, Testing, Evaluating, and Organizing Collected Data, News, and Information
 
 Herbert Spencer said “Science is organized knowledge.” If data is not organized, it is essentially useless for analysis. This stage runs parallel to the collection phase: as intelligence is gathered, it should be compared, tested, and organized to be actionable. Evidence comes from multiple sources, each with strengths, weaknesses, potential biases, and sometimes up-to-date insights. Analysts should control the source, not be dominated by it.
