@@ -26,21 +26,13 @@ Below, you can find a brief summary of how I am preparing for my profession and 
 
 ## Pictures of some of my notes
 
-![Pictures Must be there](sf1.jpeg)
+## My Notes Pictures
 
-<style>
-.horizontal-scroll {
-  display: flex;
-  overflow-x: auto;
-  gap: 10px;
-  padding: 10px 0;
-}
-.horizontal-scroll img {
-  height: 200px;
-  border-radius: 8px;
-  flex-shrink: 0;
-}
-</style>
+<div style="display:flex; overflow-x:auto; gap:10px; padding:10px 0;">
+  <img src="sf1.jpeg" alt="Note 1" style="height:200px; flex-shrink:0; border-radius:5px;">
+  <img src="sf2.jpeg" alt="Note 2" style="height:200px; flex-shrink:0; border-radius:5px;">
+  <img src="sf3.jpeg" alt="Note 3" style="height:200px; flex-shrink:0; border-radius:5px;">
+</div>
 
 <div class="horizontal-scroll">
   <img src="sf1.jpeg" alt="Note 1">
