@@ -21,3 +21,5 @@ Along this path, I began extensive research and reading. The main areas I have s
 I combine all of this with my university field and my strong interest in **cybersecurity**, taking determined steps toward my career goals.
 
 Below, you can find a brief summary of how I am preparing for my profession and the skills I have learned to become an analyst. Being someone who is always open to learning across different fields, you can see that my interests are both interconnected and diverse.
+
+## The following texts are digital versions of my own notes that have been summarized into an academic and clear format with the help of artificial intelligence. The notes were prepared based on information I gathered from lectures and sources.
