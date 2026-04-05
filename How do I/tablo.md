@@ -8,5 +8,4 @@ nav_order: 2
 
 
 
-
-<img src="tablo.svg" alt="Tablo" style="width:100%; max-width:1000px;">
+<img src="tablo.svg" alt="Tablo" style="width:100%; max-width:800px;">
