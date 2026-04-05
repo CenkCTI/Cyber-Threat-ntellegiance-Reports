@@ -24,6 +24,4 @@ Below, you can find a brief summary of how I am preparing for my profession and 
 
 ## The following texts are digital versions of my own notes that have been summarized into an academic and clear format with the help of artificial intelligence. The notes were prepared based on information I gathered from lectures and sources.
 
-
-## Pictures of some of notes my notes 
-![Pictures Must be there ](/asstes/images/sf1.jpeg)
+![Pictures Must be there]({{ site.baseurl }}/sf1.jpeg)
